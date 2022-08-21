@@ -9,8 +9,8 @@ import seaborn as sns
 
 
 # %%
-# dataset = pd.read_csv('./Torch/chap02/data/car_evaluation.csv')
-dataset = pd.read_csv('./data/car_evaluation.csv')
+dataset = pd.read_csv('./chap02/data/car_evaluation.csv')
+# dataset = pd.read_csv('./data/car_evaluation.csv')
 
 # %%
 print(dataset.head())
