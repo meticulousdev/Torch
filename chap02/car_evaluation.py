@@ -169,3 +169,26 @@ for i in range(epochs):
 
 print(f'epoch: {i:3} loss: {single_loss.item():10.2f}')
 # %%
+test_outputs = test_outputs.to(device=device, dtype=torch.int64)
+# TODO with torch.no_grad() (???)
+with torch.no_grad():
+    y_val = model(categorical_test_data)
+    y_val = y_val.to(device=device)
+    loss = loss_function(y_val, test_outputs)
+
+print(f"Loss: {loss:.8f}")
+
+# %%
+print(y_val[:5])
+y_val = np.argmax(y_val.cpu().numpy(), axis=1)
+print(y_val[:5])
+
+# %%
+import warnings
+warnings.filterwarnings('ignore') 
+from sklearn.metrics import classification_report, confusion_matrix, accuracy_score
+
+test_outputs = test_outputs.cpu().numpy()
+print(confusion_matrix(test_outputs, y_val))
+print(classification_report(test_outputs, y_val))
+print(accuracy_score(test_outputs, y_val))
