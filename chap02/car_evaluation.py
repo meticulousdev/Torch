@@ -82,7 +82,7 @@ print(f"outputs.shape: {outputs.shape}")
 categorical_column_sizes = [len(dataset[column].cat.categories) for column in categorical_columns]
 categorical_embedding_sizes = [(col_size, min(50, (col_size + 1) // 2)) for col_size in categorical_column_sizes]
 
-# TODO 임베딩과 차원의 크기
+# TODO embedding and dimension size 
 # 임베딩 크기에 대한 정확한 규칙은 없지만, 칼럼의 고유 값 수를 2로 나누는 것을 많이 사용합니다.
 # (모든 범주형 칼럼의 고유 값 수, 차원의 크기)
 # (모든 범주형 칼럼의 고유 값 수, 임베딩 크기)
