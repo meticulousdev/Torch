@@ -82,9 +82,10 @@ print(f"outputs.shape: {outputs.shape}")
 categorical_column_sizes = [len(dataset[column].cat.categories) for column in categorical_columns]
 categorical_embedding_sizes = [(col_size, min(50, (col_size + 1) // 2)) for col_size in categorical_column_sizes]
 
+# TODO 임베딩과 차원의 크기
 # 임베딩 크기에 대한 정확한 규칙은 없지만, 칼럼의 고유 값 수를 2로 나누는 것을 많이 사용합니다.
 # (모든 범주형 칼럼의 고유 값 수, 차원의 크기)
-# TODO 임베딩과 차원의 크기
+# (모든 범주형 칼럼의 고유 값 수, 임베딩 크기)
 print(categorical_embedding_sizes)
 
 # %%
@@ -109,7 +110,10 @@ class Model(nn.Module):
         self.all_embeddings = nn.ModuleList([nn.Embedding(ni, nf) for ni, nf in embedding_size])
         self.embedding_dropout = nn.Dropout(p)
 
-        # TODO layer 만드는 방법
+        # TODO all_layers.append 
+        # Unpacking
+        # all_layers = [Linear(in_features=1...bias=True), ReLU(inplace=True), ...]
+        # *all_layers = Linear(in_features=1...bias=True), ReLU(inplace=True), ...
         all_layers = []
         num_categorical_cols = sum((nf for ni, nf in embedding_size))
         input_size = num_categorical_cols 
@@ -134,7 +138,7 @@ class Model(nn.Module):
         return x
 
 # %%
-model = Model(categorical_embedding_sizes, 4, [200,100,50], p=0.4)
+model = Model(categorical_embedding_sizes, 4, [200, 100, 50], p=0.4)
 print(model)
 
 # %%
@@ -167,14 +171,21 @@ for i in range(epochs):
     optimizer.step()
 
 print(f'epoch: {i:3} loss: {single_loss.item():10.2f}')
+
 # %%
-# to mps - error
+# TODO mps error
 # if device == torch.device('mps'):
 #     device = torch.device('cpu')
 device = torch.device('cpu')
 
 test_outputs = test_outputs.to(device=device, dtype=torch.int64)
-# TODO with torch.no_grad() (???)
+# TODO with torch.no_grad():
+# https://pytorch.org/docs/stable/generated/torch.no_grad.html
+# Context-manager that disabled gradient calculation.
+# Disabling gradient calculation is useful for inference, 
+# when you are sure that you will not call Tensor.backward(). 
+# It will reduce memory consumption for computations 
+# that would otherwise have requires_grad=True.
 with torch.no_grad():
     y_val = model(categorical_test_data).to(device)
     loss = loss_function(y_val, test_outputs)
