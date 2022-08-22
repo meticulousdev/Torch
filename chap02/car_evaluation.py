@@ -110,7 +110,7 @@ class Model(nn.Module):
         self.all_embeddings = nn.ModuleList([nn.Embedding(ni, nf) for ni, nf in embedding_size])
         self.embedding_dropout = nn.Dropout(p)
 
-        # TODO all_layers.append 
+        # DONE all_layers.append 
         # Unpacking
         # all_layers = [Linear(in_features=1...bias=True), ReLU(inplace=True), ...]
         # *all_layers = Linear(in_features=1...bias=True), ReLU(inplace=True), ...
@@ -173,13 +173,13 @@ for i in range(epochs):
 print(f'epoch: {i:3} loss: {single_loss.item():10.2f}')
 
 # %%
-# TODO mps error
+# DONE mps error
 # if device == torch.device('mps'):
 #     device = torch.device('cpu')
 device = torch.device('cpu')
 
 test_outputs = test_outputs.to(device=device, dtype=torch.int64)
-# TODO with torch.no_grad():
+# DONE with torch.no_grad():
 # https://pytorch.org/docs/stable/generated/torch.no_grad.html
 # Context-manager that disabled gradient calculation.
 # Disabling gradient calculation is useful for inference, 
