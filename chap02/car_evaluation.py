@@ -174,9 +174,8 @@ print(f'epoch: {i:3} loss: {single_loss.item():10.2f}')
 
 # %%
 # DONE mps error
-# if device == torch.device('mps'):
-#     device = torch.device('cpu')
-device = torch.device('cpu')
+if device == torch.device('mps'):
+    device = torch.device('cpu')
 
 test_outputs = test_outputs.to(device=device, dtype=torch.int64)
 # DONE with torch.no_grad():
