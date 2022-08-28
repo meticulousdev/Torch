@@ -20,10 +20,10 @@ print(device)
 # %%
 # TODO download=False
 train_dataset  = torchvision.datasets.FashionMNIST("./data/", 
-                                                   download=True, 
+                                                   download=False, 
                                                    transform=transforms.Compose([transforms.ToTensor()]))
 test_dataset  = torchvision.datasets.FashionMNIST("./data/", 
-                                                  download=True, 
+                                                  download=False, 
                                                   train=False, 
                                                   transform=transforms.Compose([transforms.ToTensor()])) 
 
@@ -33,13 +33,18 @@ train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=100)
 test_loader = torch.utils.data.DataLoader(test_dataset, batch_size=100)
 
 # %%
+print(f"len(train_loader): {len(train_loader)}")
+print(f"len(test_loader): {len(test_loader)}")
+
+# %%
+# TODO labels_map - train_dataset
 labels_map = {0 : 'T-Shirt', 1 : 'Trouser', 2 : 'Pullover', 3 : 'Dress', 4 : 'Coat', 
               5 : 'Sandal', 6 : 'Shirt', 7 : 'Sneaker', 8 : 'Bag', 9 : 'Ankle Boot'}
 
 fig = plt.figure(figsize=(8, 8))
 columns = 4
 rows = 5
-for i in range(1, columns*rows +1):
+for i in range(1, columns * rows +1):
     img_xy = np.random.randint(len(train_dataset))
     img = train_dataset[img_xy][0][0,:,:]
     fig.add_subplot(rows, columns, i)
@@ -50,6 +55,7 @@ for i in range(1, columns*rows +1):
 plt.show()
 
 # %%
+# TODO in_features and out_features
 class FashionDNN(nn.Module):
     def __init__(self):
         super(FashionDNN,self).__init__()
@@ -124,18 +130,14 @@ for epoch in range(num_epochs):
 class FashionCNN(nn.Module):    
     def __init__(self):
         super(FashionCNN, self).__init__()        
-        self.layer1 = nn.Sequential(
-            nn.Conv2d(in_channels=1, out_channels=32, kernel_size=3, padding=1),
-            nn.BatchNorm2d(32),
-            nn.ReLU(),
-            nn.MaxPool2d(kernel_size=2, stride=2)
-        )       
-        self.layer2 = nn.Sequential(
-            nn.Conv2d(in_channels=32, out_channels=64, kernel_size=3),
-            nn.BatchNorm2d(64),
-            nn.ReLU(),
-            nn.MaxPool2d(2)
-        )        
+        self.layer1 = nn.Sequential(nn.Conv2d(in_channels=1, out_channels=32, kernel_size=3, padding=1), 
+                                    nn.BatchNorm2d(32), 
+                                    nn.ReLU(), 
+                                    nn.MaxPool2d(kernel_size=2, stride=2))       
+        self.layer2 = nn.Sequential(nn.Conv2d(in_channels=32, out_channels=64, kernel_size=3), 
+                                    nn.BatchNorm2d(64), 
+                                    nn.ReLU(), 
+                                    nn.MaxPool2d(2))        
         self.fc1 = nn.Linear(in_features=64*6*6, out_features=600)
         self.drop = nn.Dropout2d(0.25)
         self.fc2 = nn.Linear(in_features=600, out_features=120)
