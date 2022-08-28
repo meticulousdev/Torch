@@ -55,16 +55,18 @@ for i in range(1, columns * rows +1):
 plt.show()
 
 # %%
-# TODO in_features and out_features
 class FashionDNN(nn.Module):
     def __init__(self):
         super(FashionDNN,self).__init__()
+        # TODO in_features and out_features
         self.fc1 = nn.Linear(in_features=784,out_features=256)
         self.drop = nn.Dropout2d(0.25)
         self.fc2 = nn.Linear(in_features=256,out_features=128)
         self.fc3 = nn.Linear(in_features=128,out_features=10)
 
     def forward(self,input_data):
+        # TODO view
+        # TODO __init__ dropout & forward dropout
         out = input_data.view(-1, 784)
         out = F.relu(self.fc1(out))
         out = self.drop(out)
@@ -78,6 +80,7 @@ model = FashionDNN()
 model.to(device)
 
 criterion = nn.CrossEntropyLoss()
+# TODO model.parameters()
 optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
 print(model)
 
