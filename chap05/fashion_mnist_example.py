@@ -13,22 +13,43 @@ from torch.utils.data import Dataset, DataLoader
 
 
 # %%
-device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-# device = torch.device("mps" if torch.backends.mps.is_available() else "cpu")
+# device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+device = torch.device("mps" if torch.backends.mps.is_available() else "cpu")
 print(device)
 
 # %%
-# TODO download=False
+# DONE download and train
+# download=False & train=False
+# train (bool, optional) – If True, creates dataset from training set, otherwise creates from test set.
+# 
+# https://pytorch.org/vision/0.8/datasets.html
 train_dataset  = torchvision.datasets.FashionMNIST("./data/", 
-                                                   download=True, 
+                                                   download=False, 
                                                    transform=transforms.Compose([transforms.ToTensor()]))
 test_dataset  = torchvision.datasets.FashionMNIST("./data/", 
-                                                  download=True, 
+                                                  download=False, 
                                                   train=False, 
                                                   transform=transforms.Compose([transforms.ToTensor()])) 
 
+# train_dataset  = torchvision.datasets.FashionMNIST("./chap05/data/", 
+#                                                    download=False, 
+#                                                    transform=transforms.Compose([transforms.ToTensor()]))
+# test_dataset  = torchvision.datasets.FashionMNIST("./chap05/data/", 
+#                                                   download=False, 
+#                                                   train=False, 
+#                                                   transform=transforms.Compose([transforms.ToTensor()])) 
+
 # %%
-# TODO DataLoader
+print("Train dataset")
+print(f"type: {type(train_dataset)}")
+print(train_dataset)
+print()
+print("Test dataset")
+print(f"type: {type(test_dataset)}")
+print(test_dataset)
+
+# %%
+# DONE DataLoader
 # - map-style and iterable-style datasets,
 # - customizing data loading order,
 # - automatic batching,
@@ -43,12 +64,15 @@ test_loader = torch.utils.data.DataLoader(test_dataset, batch_size=100)
 # %%
 print(f"type(train_loader): {type(train_loader)}")
 print(f"len(train_loader): {len(train_loader)}")
-# print(dir(train_loader))
+print(dir(train_loader))
 print()
 print(f"len(test_loader): {len(test_loader)}")
 
 # %%
-# TODO labels_map - train_dataset
+# DONE labels_map - train_dataset
+# train_dataset -> (image, target) X N
+# train_dataset[img_xy] -> (image, target)
+# train_dataset[img_xy][1] -> target
 labels_map = {0 : 'T-Shirt', 1 : 'Trouser', 2 : 'Pullover', 3 : 'Dress', 4 : 'Coat', 
               5 : 'Sandal', 6 : 'Shirt', 7 : 'Sneaker', 8 : 'Bag', 9 : 'Ankle Boot'}
 
