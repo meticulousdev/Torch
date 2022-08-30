@@ -124,7 +124,8 @@ model = FashionDNN()
 model.to(device)
 
 criterion = nn.CrossEntropyLoss()
-# TODO model.parameters()
+# DONE model.parameters()
+# see model_parameters.ipynb
 optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
 print(model)
 
@@ -177,7 +178,7 @@ for epoch in range(num_epochs):
 class FashionCNN(nn.Module):    
     def __init__(self):
         super(FashionCNN, self).__init__()       
-        # TODO nn.xx / nn.functional / nn.Sequential 
+        # TODO nn.xx / nn.functional.xx / nn.Sequential 
         self.layer1 = nn.Sequential(nn.Conv2d(in_channels=1, out_channels=32, kernel_size=3, padding=1), 
                                     nn.BatchNorm2d(32), 
                                     nn.ReLU(), 
