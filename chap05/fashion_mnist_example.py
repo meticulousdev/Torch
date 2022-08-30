@@ -4,8 +4,8 @@ import matplotlib.pyplot as plt
 
 import torch
 import torch.nn as nn
-from torch.autograd import Variable
 import torch.nn.functional as F
+from torch.autograd import Variable
 
 import torchvision
 import torchvision.transforms as transforms
@@ -54,12 +54,7 @@ print(test_dataset)
 
 # %%
 # DONE DataLoader
-# - map-style and iterable-style datasets,
-# - customizing data loading order,
-# - automatic batching,
-# - single- and multi-process data loading,
-# - automatic memory pinning.
-# https://pytorch.org/docs/stable/data.html#torch.utils.data.DataLoader
+# see dataset_test.ipynb
 
 train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=100)
 test_loader = torch.utils.data.DataLoader(test_dataset, batch_size=100)
@@ -178,7 +173,8 @@ for epoch in range(num_epochs):
 class FashionCNN(nn.Module):    
     def __init__(self):
         super(FashionCNN, self).__init__()       
-        # TODO nn.xx / nn.functional.xx / nn.Sequential 
+        # DONE nn.xx / nn.functional.xx / nn.Sequential 
+        # Table 5.1
         self.layer1 = nn.Sequential(nn.Conv2d(in_channels=1, out_channels=32, kernel_size=3, padding=1), 
                                     nn.BatchNorm2d(32), 
                                     nn.ReLU(), 
