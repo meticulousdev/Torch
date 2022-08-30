@@ -11,33 +11,37 @@ import torchvision
 import torchvision.transforms as transforms
 from torch.utils.data import Dataset, DataLoader
 
+import platform
+
 
 # %%
-# device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-device = torch.device("mps" if torch.backends.mps.is_available() else "cpu")
+if platform.platform()[:7] == 'Windows':
+    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+else:
+    device = torch.device("mps" if torch.backends.mps.is_available() else "cpu")
+
 print(device)
 
 # %%
 # DONE download and train
 # download=False & train=False
 # train (bool, optional) – If True, creates dataset from training set, otherwise creates from test set.
-# 
 # https://pytorch.org/vision/0.8/datasets.html
-train_dataset  = torchvision.datasets.FashionMNIST("./data/", 
-                                                   download=False, 
-                                                   transform=transforms.Compose([transforms.ToTensor()]))
-test_dataset  = torchvision.datasets.FashionMNIST("./data/", 
-                                                  download=False, 
-                                                  train=False, 
-                                                  transform=transforms.Compose([transforms.ToTensor()])) 
-
-# train_dataset  = torchvision.datasets.FashionMNIST("./chap05/data/", 
+# train_dataset  = torchvision.datasets.FashionMNIST("./data/", 
 #                                                    download=False, 
 #                                                    transform=transforms.Compose([transforms.ToTensor()]))
-# test_dataset  = torchvision.datasets.FashionMNIST("./chap05/data/", 
+# test_dataset  = torchvision.datasets.FashionMNIST("./data/", 
 #                                                   download=False, 
 #                                                   train=False, 
 #                                                   transform=transforms.Compose([transforms.ToTensor()])) 
+
+train_dataset  = torchvision.datasets.FashionMNIST("./chap05/data/", 
+                                                   download=False, 
+                                                   transform=transforms.Compose([transforms.ToTensor()]))
+test_dataset  = torchvision.datasets.FashionMNIST("./chap05/data/", 
+                                                  download=False, 
+                                                  train=False, 
+                                                  transform=transforms.Compose([transforms.ToTensor()])) 
 
 # %%
 print("Train dataset")
@@ -55,7 +59,6 @@ print(test_dataset)
 # - automatic batching,
 # - single- and multi-process data loading,
 # - automatic memory pinning.
-# 
 # https://pytorch.org/docs/stable/data.html#torch.utils.data.DataLoader
 
 train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=100)
@@ -90,18 +93,24 @@ for i in range(1, columns * rows +1):
 plt.show()
 
 # %%
+# DONE __init__ & forward
+# __init__: Network model definition
+# forward: forward propagation
 class FashionDNN(nn.Module):
     def __init__(self):
         super(FashionDNN,self).__init__()
-        # TODO in_features and out_features
-        self.fc1 = nn.Linear(in_features=784,out_features=256)
+        # DONE in_features and out_features
+        # input_data.size() -> torch.Size([100, 1, 28, 28])
+        # out.size() -> torch.Size([100, 784])
+        self.fc1 = nn.Linear(in_features=784, out_features=256)
         self.drop = nn.Dropout2d(0.25)
-        self.fc2 = nn.Linear(in_features=256,out_features=128)
-        self.fc3 = nn.Linear(in_features=128,out_features=10)
+        self.fc2 = nn.Linear(in_features=256, out_features=128)
+        self.fc3 = nn.Linear(in_features=128, out_features=10)
 
     def forward(self,input_data):
-        # TODO view
-        # TODO __init__ dropout & forward dropout
+        # DONE view - reshape
+        # the size -1 is inferred from other dimensions
+        # https://pytorch.org/docs/stable/generated/torch.Tensor.view.html
         out = input_data.view(-1, 784)
         out = F.relu(self.fc1(out))
         out = self.drop(out)
@@ -167,7 +176,8 @@ for epoch in range(num_epochs):
 # %%
 class FashionCNN(nn.Module):    
     def __init__(self):
-        super(FashionCNN, self).__init__()        
+        super(FashionCNN, self).__init__()       
+        # TODO nn.xx / nn.functional / nn.Sequential 
         self.layer1 = nn.Sequential(nn.Conv2d(in_channels=1, out_channels=32, kernel_size=3, padding=1), 
                                     nn.BatchNorm2d(32), 
                                     nn.ReLU(), 
