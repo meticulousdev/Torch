@@ -21,10 +21,20 @@ print(X.head())
 scaler = StandardScaler()
 X_scaled = scaler.fit_transform(X)
 
-# TODO Gaussian distribution
+# %%
+plt.hist(X_scaled)
+plt.show()
+
+# %%
+# DONE Gaussian distribution
 X_normalized = normalize(X_scaled) 
 X_normalized = pd.DataFrame(X_normalized)
 
+# %%
+plt.hist(X_normalized)
+plt.show()
+
+# %%
 pca = PCA(n_components = 2)
 X_principal = pca.fit_transform(X_normalized)
 X_principal = pd.DataFrame(X_principal) 
