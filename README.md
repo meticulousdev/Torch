@@ -4,6 +4,6 @@
 
 ### TODO list
 
-- Filter 시각화
+- ilter 시각화
 
 - activation map 시각화
